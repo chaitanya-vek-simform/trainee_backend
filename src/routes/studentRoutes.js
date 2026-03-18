@@ -3,10 +3,10 @@ const router = express.Router();
 const studentController = require('../controllers/studentController');
 
 // Define routes
-router.get('/items', studentController.getAllStudents); // Returns all students as per requirements
-router.get('/students', studentController.getAllStudents); // Standard REST alias
+router.get('/students', studentController.getAllStudents);
 
 router.post('/students', studentController.createStudent);
 router.put('/students/:id', studentController.updateStudent);
+router.delete('/students/:id', studentController.deleteStudent);
 
 module.exports = router;

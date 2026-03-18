@@ -12,13 +12,10 @@ exports.getAllStudents = async (req, res) => {
 
 exports.createStudent = async (req, res) => {
     try {
-        const { name, description } = req.body; // Getting description as requested
-        
-        // Map description to department based on table schema requirements
-        const department = description || req.body.department;
+        const { name, department } = req.body;
 
         if (!name || !department) {
-            return res.status(400).json({ message: 'Name and description/department are required.' });
+            return res.status(400).json({ message: 'Name and department are required.' });
         }
 
         const id = await Student.create({ name, department });
@@ -37,13 +34,10 @@ exports.createStudent = async (req, res) => {
 exports.updateStudent = async (req, res) => {
     try {
         const { id } = req.params;
-        const { name, description } = req.body;
-        
-        // Map description to department
-        const department = description || req.body.department;
+        const { name, department } = req.body;
 
         if (!name || !department) {
-            return res.status(400).json({ message: 'Name and description/department are required.' });
+            return res.status(400).json({ message: 'Name and department are required.' });
         }
 
         const affectedRows = await Student.update(id, { name, department });
@@ -61,5 +55,22 @@ exports.updateStudent = async (req, res) => {
     } catch (error) {
         console.error('Error updating student:', error);
         res.status(500).json({ message: 'Internal server error while updating student.' });
+    }
+};
+
+exports.deleteStudent = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const affectedRows = await Student.delete(id);
+
+        if (affectedRows === 0) {
+            return res.status(404).json({ message: 'Student not found.' });
+        }
+
+        res.status(200).json({ message: 'Student deleted successfully.' });
+    } catch (error) {
+        console.error('Error deleting student:', error);
+        res.status(500).json({ message: 'Internal server error while deleting student.' });
     }
 };
